@@ -21,13 +21,17 @@ namespace ToDoList.Pages
             InitializeComponent();
             _listService = new Service<Lists>(context);
             _user = user;
-            var lists = _listService.GetAll();
+            
+            UpdateLists();
+        }
 
+        private void UpdateLists()
+        {
+            var lists = _listService.GetAll();
             foreach (var list in lists)
             {
                 AddDynamicMenuItem(list);
             }
-            
         }
 
         private void AddDynamicMenuItem(Lists list)
@@ -193,6 +197,17 @@ namespace ToDoList.Pages
         private void ListItemSelectedClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void CreateNewList(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var list = new Lists { Name = "New list" };
+                _listService.Add(list);
+                UpdateLists();
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
     }
 }

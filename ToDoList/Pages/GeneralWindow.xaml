@@ -39,7 +39,7 @@
                     Margin="15,0,0,0"
                     Background="#4CAF50"
                     Foreground="White"
-                    Height="30">
+                    Height="30" Click="CreateNewList">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Cursor" Value="Hand"/>
