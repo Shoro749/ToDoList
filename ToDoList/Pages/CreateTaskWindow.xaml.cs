@@ -11,7 +11,6 @@ namespace ToDoList.Pages
     {
         public Tasks newTask;
         private readonly Lists _list;
-        private readonly User _user;
         public TaskWindow(Lists list)
         {
             InitializeComponent();

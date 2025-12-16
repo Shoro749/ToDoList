@@ -142,12 +142,14 @@ namespace ToDoList.Pages
         private void ContextMenuEditClick(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            Button listButtonToUpdate = menuItem.Tag as Button;
 
-            if (listButtonToUpdate == null) return;
+            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
+            if (contextMenu == null) return;
 
-            Lists itemToUpdate = listButtonToUpdate.Tag as Lists;
+            Button optionsButton = contextMenu.PlacementTarget as Button;
+            if (optionsButton == null) return;
 
+            Lists itemToUpdate = optionsButton.Tag as Lists;
             if (itemToUpdate == null) return;
 
             UpdateListWindow window = new UpdateListWindow(itemToUpdate.Name);
@@ -155,12 +157,26 @@ namespace ToDoList.Pages
 
             if (result == true)
             {
-                string newName = window.Name;
+                string newName = window.listName;
                 if (!string.IsNullOrWhiteSpace(newName) && newName != itemToUpdate.Name)
                 {
                     itemToUpdate.Name = newName;
                     _listService.Update(itemToUpdate.Id, itemToUpdate);
-                    listButtonToUpdate.Content = newName;
+
+                    foreach (var child in sp_lists.Children)
+                    {
+                        if (child is Grid grid)
+                        {
+                            foreach (var el in grid.Children)
+                            {
+                                if (el is Button btn && btn.Tag == itemToUpdate)
+                                {
+                                    btn.Content = newName;
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
