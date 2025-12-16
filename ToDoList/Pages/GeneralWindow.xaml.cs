@@ -4,6 +4,7 @@ using Services.Interfaces;
 using Services.Services;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ToDoList.Pages
@@ -36,16 +37,37 @@ namespace ToDoList.Pages
             itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             itemGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
 
-            TextBlock itemText = new TextBlock
+            Button itemButton = new Button
             {
-                Text = list.Name,
+                Name = $"btn_{list.Id}",
+                Content = list.Name,
+                Tag = list,
+
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                Padding = new Thickness(0),
+
                 Foreground = (Brush)new BrushConverter().ConvertFromString("#AAAAAA"),
                 FontSize = 16,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 5, 0, 0)
             };
-            Grid.SetColumn(itemText, 0);
-            itemGrid.Children.Add(itemText);
+
+            itemButton.Click += ListItemSelectedClick;
+
+            Style buttonStyle = new Style(typeof(Button));
+            buttonStyle.Setters.Add(new Setter(Button.CursorProperty, Cursors.Hand));
+    
+            Trigger mouseOverTrigger = new Trigger { Property = IsMouseOverProperty, Value = true };
+            mouseOverTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)new BrushConverter().ConvertFromString("#444444")));
+            buttonStyle.Triggers.Add(mouseOverTrigger);
+    
+            itemButton.Style = buttonStyle;
+
+
+            Grid.SetColumn(itemButton, 0);
+            itemGrid.Children.Add(itemButton);
 
             ContextMenu contextMenu = new ContextMenu();
 
@@ -106,10 +128,27 @@ namespace ToDoList.Pages
         private void ContextMenuEditClick(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            ContextMenu contextMenu = (ContextMenu)menuItem.Parent;
-            Button sourceButton = (Button)contextMenu.PlacementTarget;
+            Button listButtonToUpdate = menuItem.Tag as Button;
 
-            Lists itemToUpdate = sourceButton.Tag as Lists;
+            if (listButtonToUpdate == null) return;
+
+            Lists itemToUpdate = listButtonToUpdate.Tag as Lists;
+
+            if (itemToUpdate == null) return;
+
+            UpdateListWindow window = new UpdateListWindow(itemToUpdate.Name);
+            bool? result = window.ShowDialog();
+
+            if (result == true)
+            {
+                string newName = window.Name;
+                if (!string.IsNullOrWhiteSpace(newName) && newName != itemToUpdate.Name)
+                {
+                    itemToUpdate.Name = newName;
+                    _listService.Update(itemToUpdate.Id, itemToUpdate);
+                    listButtonToUpdate.Content = newName;
+                }
+            }
         }
 
         private void ContextMenuDeleteClick(object sender, RoutedEventArgs e)
@@ -149,6 +188,11 @@ namespace ToDoList.Pages
                 }
             }
             catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+
+        private void ListItemSelectedClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
