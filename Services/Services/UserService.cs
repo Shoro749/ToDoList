@@ -1,11 +1,10 @@
 ﻿using Data.context;
 using Data.models;
 using Repositories.Repositories;
-using Services.Interfaces;
 
 namespace Services.Services
 {
-    public class UserService : Service<User>, IUserService
+    public class UserService : Service<User>
     {
         private readonly UserRepository _userRepository;
         public UserService(DataContext context) : base (context)

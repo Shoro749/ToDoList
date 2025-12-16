@@ -1,5 +1,6 @@
 ﻿using Data.context;
 using Data.models;
+using Repositories.Repositories;
 using Services.Interfaces;
 using Services.Services;
 using System;
@@ -18,11 +19,17 @@ namespace ToDoList.Pages
         private readonly User _user;
         private readonly IService<Lists> _listService;
         private readonly IService<User> _userService;
+        private readonly IService<Tasks> _tasksService;
+        private readonly ITaskService _taskService;
+        private Lists _currentList;
         public GeneralWindow(DataContext context, User user)
         {
             InitializeComponent();
             _listService = new Service<Lists>(context);
             _userService = new Service<User>(context);
+            _taskService = new TaskService(context);
+            _tasksService = new TaskService(context);
+
             _user = user;
             
             UpdateLists();
@@ -171,6 +178,8 @@ namespace ToDoList.Pages
                 if (itemToDelete == null) return;
 
                 _listService.Delete(itemToDelete.Id);
+                dg_tasks.Visibility = Visibility.Hidden;
+                _currentList = null;
 
                 Grid itemGrid = sourceButton.Parent as Grid;
 
@@ -199,7 +208,25 @@ namespace ToDoList.Pages
 
         private void ListItemSelectedClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Button selectedButton = sender as Button;
+
+            if (selectedButton != null)
+            {
+                Lists selectedList = selectedButton.Tag as Lists;
+
+                if (selectedList != null)
+                {
+                    _currentList = selectedList;
+                    LoadListTasks(selectedList.Id);
+                    dg_tasks.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void LoadListTasks(int id)
+        {
+            try { dg_tasks.ItemsSource = _taskService.GetByListId(id); }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
         private void CreateNewList(object sender, RoutedEventArgs e)
@@ -234,6 +261,72 @@ namespace ToDoList.Pages
                 mainWindow.Show();
                 this.Close();
             }
+        }
+
+        private void AddTaskClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_currentList == null)
+                {
+                    MessageBox.Show("Select a list.");
+                    return;
+                }
+
+                TaskWindow window = new TaskWindow(_currentList);
+                bool? result = window.ShowDialog();
+
+                if (result == true)
+                {
+                    var task = window.newTask;
+                    _tasksService.Add(task);
+                    LoadListTasks(task.List.Id);
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+
+        private void UpdateTaskClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selected = dg_tasks.SelectedItem as Tasks;
+
+                if (selected == null)
+                {
+                    MessageBox.Show("Select a task to edit.");
+                    return;
+                }
+
+                TaskWindow window = new TaskWindow(selected, _currentList);
+                bool? result = window.ShowDialog();
+
+                if (result == true)
+                {
+                    var task = window.newTask;
+                    _tasksService.Update(task.Id, task);
+                    LoadListTasks(task.List.Id);
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+
+        private void DeleteTaskClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selected = dg_tasks.SelectedItem as Tasks;
+
+                if (selected == null)
+                {
+                    MessageBox.Show("Select a task to delete.");
+                    return;
+                }
+
+                _tasksService.Delete(selected.Id);
+                LoadListTasks(selected.List.Id);
+            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
     }
 }
