@@ -1,9 +1,10 @@
 ﻿using Data.context;
 using Data.models;
+using Repositories.Interfaces;
 
 namespace Repositories.Repositories
 {
-    public class UserRepository : Repository<User>
+    public class UserRepository : Repository<User>, IUserRepository
     {
         public UserRepository(DataContext context) : base(context) { }
 
@@ -14,7 +15,7 @@ namespace Repositories.Repositories
 
         public User GetByName(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username = username);
+            return _context.Users.FirstOrDefault(u => u.Username == username);
         }
     }
 }
