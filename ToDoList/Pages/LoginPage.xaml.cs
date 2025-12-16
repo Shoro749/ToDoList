@@ -1,4 +1,5 @@
 ﻿using Data.context;
+using Services.services;
 using Services.Services;
 using System.Windows;
 
@@ -27,19 +28,19 @@ namespace ToDoList.Pages
 
                 if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
                 {
-                    MessageBox.Show("Будь ласка, заповніть всі поля.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Please fill in all fields", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                //if (_userService.IsTakenName(login))
-                //{
-                //    MessageBox.Show("Ім'я користувача уже зайняте.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //    return;
-                //}
+                var user = _userService.GetByName(login);
 
-                var user = _userService
+                if (!PasswordHasher.VerifyPassword(password, user.PasswordHash))
+                {
+                    MessageBox.Show("User not found or password incorrect", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                MainWindow mainWindow =  = new MainWindow(context);
+                MainWindow mainWindow = new MainWindow(_context, user);
                 Application.Current.MainWindow = mainWindow;
                 mainWindow.Show();
                 this.Close();
@@ -49,7 +50,8 @@ namespace ToDoList.Pages
 
         private void RegisterClick(object sender, RoutedEventArgs e)
         {
-
+            RegisterWindow window = new RegisterWindow(_userService);
+            window.ShowDialog();
         }
     }
 }

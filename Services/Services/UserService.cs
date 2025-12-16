@@ -16,5 +16,12 @@ namespace Services.Services
         {
             return _userRepository.IsTakenName(name);
         }
+
+        public User GetByName(string name)
+        {
+            var user = _userRepository.GetByName(name);
+            if (user == null) throw new InvalidOperationException($"User not found or password incorrect");
+            return user;
+        }
     }
 }
