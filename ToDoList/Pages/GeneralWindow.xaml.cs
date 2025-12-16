@@ -233,7 +233,11 @@ namespace ToDoList.Pages
         {
             try
             {
-                var list = new Lists { Name = "New list" };
+                var list = new Lists
+                {
+                    User = _user,
+                    Name = "New list"
+                };
                 _listService.Add(list);
                 UpdateLists();
             }

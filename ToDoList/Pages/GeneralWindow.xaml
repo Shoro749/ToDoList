@@ -124,7 +124,14 @@
                           HeadersVisibility="Column"
                           IsReadOnly="True"
                           SelectionMode="Single"
-                          Visibility="Hidden"/>
+                          Visibility="Hidden">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="White"/>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    </DataGrid>
 
                     <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" 

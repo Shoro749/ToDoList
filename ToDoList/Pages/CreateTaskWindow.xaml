@@ -44,6 +44,13 @@
             <ComboBoxItem Content="To Do 📋"/>
             <ComboBoxItem Content="In Progress 🚀"/>
             <ComboBoxItem Content="Done ✅"/>
+            
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="White"/>
+                </Style>
+            </ComboBox.ItemContainerStyle>
         </ComboBox>
 
         <TextBlock Grid.Row="6" Text="Due Date:" Foreground="#AAAAAA" Margin="0,0,0,5"/>
