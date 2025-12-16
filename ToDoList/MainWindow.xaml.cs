@@ -1,4 +1,5 @@
-﻿using Data.models;
+﻿using Data.context;
+using Data.models;
 using System.Windows;
 
 namespace ToDoList
@@ -8,7 +9,7 @@ namespace ToDoList
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(DataContext context, User user)
         {
             InitializeComponent();
         }

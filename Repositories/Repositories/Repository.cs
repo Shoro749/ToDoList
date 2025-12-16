@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 
-namespace Repositories
+namespace Repositories.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly DataContext _context;
+        protected readonly DataContext _context;
         public Repository(DataContext context) => _context = context;
 
         public bool Add(T item)
