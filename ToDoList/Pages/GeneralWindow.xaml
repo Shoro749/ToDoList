@@ -63,12 +63,12 @@
                         Margin="0,0,5,0"
                         Background="#D32F2F"
                         Foreground="White"
-                        Height="30"/>
+                        Height="30" Click="LogOutClick"/>
                     <Button Content="Delete users"
                         Margin="0,0,10,0"
                         Background="#D32F2F"
                         Foreground="White"
-                        Height="30"/>
+                        Height="30" Click="DeleteUserClick"/>
                 </StackPanel>
             </Grid>
         </Border>

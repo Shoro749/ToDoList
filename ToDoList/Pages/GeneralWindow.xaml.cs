@@ -2,6 +2,7 @@
 using Data.models;
 using Services.Interfaces;
 using Services.Services;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,10 +17,12 @@ namespace ToDoList.Pages
     {
         private readonly User _user;
         private readonly IService<Lists> _listService;
+        private readonly IService<User> _userService;
         public GeneralWindow(DataContext context, User user)
         {
             InitializeComponent();
             _listService = new Service<Lists>(context);
+            _userService = new Service<User>(context);
             _user = user;
             
             UpdateLists();
@@ -208,6 +211,29 @@ namespace ToDoList.Pages
                 UpdateLists();
             }
             catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+
+        private void LogOutClick(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            Application.Current.MainWindow = mainWindow;
+            mainWindow.Show();
+            this.Close();
+        }
+
+        private void DeleteUserClick(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _userService.Delete(_user.Id);
+
+                MainWindow mainWindow = new MainWindow();
+                Application.Current.MainWindow = mainWindow;
+                mainWindow.Show();
+                this.Close();
+            }
         }
     }
 }
