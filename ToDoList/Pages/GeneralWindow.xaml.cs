@@ -348,5 +348,18 @@ namespace ToDoList.Pages
             }
             catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
+
+        private void FilterChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbFilterStatus == null || _currentList == null) return;
+
+            var selectedItem = cbFilterStatus.SelectedItem as ComboBoxItem;
+            if (selectedItem == null) return;
+
+            string statusText = selectedItem.Content.ToString();
+
+            if (cbFilterStatus.SelectedIndex == 0) LoadListTasks(_currentList.Id);
+            else dg_tasks.ItemsSource = _taskService.GetByStatus(_currentList.Id, statusText);
+        }
     }
 }

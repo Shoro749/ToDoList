@@ -13,8 +13,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" 
-            Background="#388E3C"  
-            Padding="5">
+        Background="#388E3C"  
+        Padding="5">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -26,20 +26,20 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                       Text="JUST DO LIST"
-                       Foreground="White"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="10,0,0,0"/>
+                   Text="JUST DO LIST"
+                   Foreground="White"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0"/>
 
                 <Button Grid.Column="1" 
-                    Content="Add new list"
-                    HorizontalAlignment="Left"
-                    Margin="15,0,0,0"
-                    Background="#4CAF50"
-                    Foreground="White"
-                    Height="30" Click="CreateNewList">
+                Content="Add new list"
+                HorizontalAlignment="Left"
+                Margin="15,0,0,0"
+                Background="#4CAF50"
+                Foreground="White"
+                Height="30" Click="CreateNewList">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Cursor" Value="Hand"/>
@@ -52,13 +52,29 @@
                     </Button.Style>
                 </Button>
 
-                <TextBox Grid.Column="2"
-                 Width="150"
-                 Height="30"
-                 Margin="0,0,10,0"
-                 VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="2"
+                  x:Name="cbFilterStatus"
+                  Width="140"
+                  Height="30"
+                  Margin="0,0,10,0"
+                  VerticalAlignment="Center"
+                  Background="White"
+                  Foreground="Black"
+                  VerticalContentAlignment="Center" SelectionChanged="FilterChanged">
+                    <ComboBoxItem Content="Default" IsSelected="True"/>
+                    <ComboBoxItem Content="To Do 📋"/>
+                    <ComboBoxItem Content="In Progress 🚀"/>
+                    <ComboBoxItem Content="Done ✅"/>
 
-                <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Background" Value="White"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Log out"
                     Margin="0,0,5,0"
                     Background="#D32F2F"
@@ -117,7 +133,7 @@
 
                     <DataGrid x:Name="dg_tasks"
                       Grid.Row="0"
-                      AutoGenerateColumns="True"
+                      AutoGenerateColumns="False"
                       Background="#2D2D30" 
                       Foreground="Black" 
                       BorderBrush="#4CAF50"
@@ -125,6 +141,12 @@
                       IsReadOnly="True"
                       SelectionMode="Single"
                       Visibility="Hidden">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Desc}" />
+                            <DataGridTextColumn Header="Age" Binding="{Binding Status}" />
+                            <DataGridTextColumn Header="Group" Binding="{Binding Date}" />
+                        </DataGrid.Columns>
+
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Foreground" Value="Black"/>

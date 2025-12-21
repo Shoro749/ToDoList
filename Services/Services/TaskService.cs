@@ -18,5 +18,10 @@ namespace Services.Services
         {
             return _repository.GetByListId(id);
         }
+
+        public List<Tasks> GetByStatus(int id, string status)
+        {
+            return _repository.GetByStatus(id, status);
+        }
     }
 }

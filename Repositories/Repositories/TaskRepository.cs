@@ -12,5 +12,10 @@ namespace Repositories.Repositories
         {
             return _context.Tasks.Where(t => t.List.Id == id).ToList();
         }
+
+        public List<Tasks> GetByStatus(int id, string status)
+        {
+            return _context.Tasks.Where(t => t.List.Id == id && t.Status == status).ToList();
+        }
     }
 }
