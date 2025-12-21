@@ -52,23 +52,23 @@
                     </Button.Style>
                 </Button>
 
-                <TextBox Grid.Column="4"
-                     Width="150"
-                     Height="30"
-                     Margin="0,0,10,0"
-                     VerticalAlignment="Center"/>
+                <TextBox Grid.Column="2"
+                 Width="150"
+                 Height="30"
+                 Margin="0,0,10,0"
+                 VerticalAlignment="Center"/>
 
                 <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Log out"
-                        Margin="0,0,5,0"
-                        Background="#D32F2F"
-                        Foreground="White"
-                        Height="30" Click="LogOutClick"/>
+                    Margin="0,0,5,0"
+                    Background="#D32F2F"
+                    Foreground="White"
+                    Height="30" Click="LogOutClick"/>
                     <Button Content="Delete users"
-                        Margin="0,0,10,0"
-                        Background="#D32F2F"
-                        Foreground="White"
-                        Height="30" Click="DeleteUserClick"/>
+                    Margin="0,0,10,0"
+                    Background="#D32F2F"
+                    Foreground="White"
+                    Height="30" Click="DeleteUserClick"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -116,19 +116,33 @@
                            Visibility="Visible"/>
 
                     <DataGrid x:Name="dg_tasks"
-                          Grid.Row="0"
-                          AutoGenerateColumns="True"
-                          Background="#2D2D30" 
-                          Foreground="White"
-                          BorderBrush="#4CAF50"
-                          HeadersVisibility="Column"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          Visibility="Hidden">
+                      Grid.Row="0"
+                      AutoGenerateColumns="True"
+                      Background="#2D2D30" 
+                      Foreground="Black" 
+                      BorderBrush="#4CAF50"
+                      HeadersVisibility="Column"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      Visibility="Hidden">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="Background" Value="White"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#4CAF50"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
                         </DataGrid.CellStyle>
                     </DataGrid>
